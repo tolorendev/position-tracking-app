@@ -34,7 +34,12 @@ const App = () => {
 
   const handleMouseUp = () => {
     setIsDrawing(false);
-    setRectangles((prevRectangles) => [...prevRectangles, currentRectangle]);
+
+    setRectangles((prevRectangles) => {
+      return currentRectangle.width === 0 && currentRectangle.height === 0
+        ? prevRectangles
+        : [...prevRectangles, currentRectangle];
+    });
     setCurrentRectangle({
       startX: 0,
       startY: 0,
