@@ -43,6 +43,12 @@ const App = () => {
     });
   };
 
+  const handleRectangleClick = (rectangle) => {
+    alert(
+      `Position: (${rectangle.startX}, ${rectangle.startY})\nSize: ${rectangle.width} x ${rectangle.height}`
+    );
+  };
+
   return (
     <div
       className="canvas"
@@ -60,6 +66,7 @@ const App = () => {
             width: rectangle.width,
             height: rectangle.height,
           }}
+          onClick={() => handleRectangleClick(rectangle)}
         />
       ))}
       {isDrawing && (
