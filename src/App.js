@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./App.css";
+import "./App.scss";
 
 const App = () => {
   const [isDrawing, setIsDrawing] = useState(false);
