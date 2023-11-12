@@ -2,57 +2,74 @@ import React, { useState } from "react";
 import "./App.css";
 
 const App = () => {
-  const [rectangle, setRectangle] = useState(null);
+  const [isDrawing, setIsDrawing] = useState(false);
+  const [rectangles, setRectangles] = useState([]);
+  const [currentRectangle, setCurrentRectangle] = useState({
+    startX: 0,
+    startY: 0,
+    width: 0,
+    height: 0,
+  });
 
   const handleMouseDown = (event) => {
     const { clientX, clientY } = event;
-    const rectangle = {
+    setIsDrawing(true);
+    setCurrentRectangle({
       startX: clientX,
       startY: clientY,
       width: 0,
       height: 0,
-    };
-    setRectangle(rectangle);
+    });
   };
 
   const handleMouseMove = (event) => {
-    if (!rectangle) return;
+    if (!isDrawing) return;
     const { clientX, clientY } = event;
-    const updatedRectangle = {
-      ...rectangle,
-      width: clientX - rectangle.startX,
-      height: clientY - rectangle.startY,
-    };
-    setRectangle(updatedRectangle);
+    setCurrentRectangle((prevRectangle) => ({
+      ...prevRectangle,
+      width: clientX - prevRectangle.startX,
+      height: clientY - prevRectangle.startY,
+    }));
   };
 
   const handleMouseUp = () => {
-    if (!rectangle) return;
-
-    // Log tọa độ của hình chữ nhật
-    console.log("X:", rectangle.startX, ", Y:", rectangle.startY);
-
-    setRectangle(null);
+    setIsDrawing(false);
+    setRectangles((prevRectangles) => [...prevRectangles, currentRectangle]);
+    setCurrentRectangle({
+      startX: 0,
+      startY: 0,
+      width: 0,
+      height: 0,
+    });
   };
 
   return (
     <div
-      className="app"
+      className="canvas"
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
     >
-      <h1>Position tracking</h1>
-      {rectangle && (
+      {rectangles.map((rectangle, index) => (
         <div
+          key={index}
+          className="rectangle"
           style={{
-            position: "absolute",
             top: rectangle.startY,
             left: rectangle.startX,
             width: rectangle.width,
             height: rectangle.height,
-            border: "1px solid red",
-            backgroundColor: "rgba(255, 0, 0, 0.2)",
+          }}
+        />
+      ))}
+      {isDrawing && (
+        <div
+          className="current-rectangle"
+          style={{
+            top: currentRectangle.startY,
+            left: currentRectangle.startX,
+            width: currentRectangle.width,
+            height: currentRectangle.height,
           }}
         />
       )}
@@ -61,29 +78,3 @@ const App = () => {
 };
 
 export default App;
-
-// import logo from './logo.svg';
-// import './App.css';
-
-// function App() {
-//   return (
-//     <div className="App">
-//       <header className="App-header">
-//         <img src={logo} className="App-logo" alt="logo" />
-//         <p>
-//           Edit <code>src/App.js</code> and save to reload.
-//         </p>
-//         <a
-//           className="App-link"
-//           href="https://reactjs.org"
-//           target="_blank"
-//           rel="noopener noreferrer"
-//         >
-//           Learn React
-//         </a>
-//       </header>
-//     </div>
-//   );
-// }
-
-// export default App;
